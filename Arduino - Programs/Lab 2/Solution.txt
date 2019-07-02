@@ -1,0 +1,144 @@
+//16371101
+//Jordan O Donnell
+//Lab 2 (EE108R)
+//Part 1 NestedIfStatements
+//02/10/2017
+
+#include <ee108.h>
+
+const int SUPERLOOP_DELAY_MS = 100;
+const int REPETITION_VALUE = 15;
+
+void setup() 
+{
+  pinMode(SW1_PIN, INPUT);
+  pinMode(LED1_PIN, OUTPUT);
+  pinMode(LED2_PIN, OUTPUT);
+}
+
+void loop() 
+{
+  static int localLoopNumber = 0;
+  
+  if(digitalRead(SW1_PIN) == SW_ACTIVE)
+  {
+    digitalWrite(LED1_PIN, HIGH);
+    delay(SUPERLOOP_DELAY_MS); //This sets a delay of 100ms in the loop so it increments until it hits over 1500ms then LED2 is set to HIGH.
+    localLoopNumber++; //Increments loop until it hits 1500ms
+      if(localLoopNumber >= REPETITION_VALUE)// If loop repetitions reaches over 15 (reaches over 1500 ms) then sets LED2 to HIGH.
+      {
+        digitalWrite(LED2_PIN, HIGH);
+      }
+  }
+  if(digitalRead(SW1_PIN) == SW_INACTIVE)
+  {
+    digitalWrite(LED2_PIN, LOW);
+    digitalWrite(LED1_PIN, LOW);
+    localLoopNumber = 0;
+  }
+}
+
+*********************************************************************************************************************************************************
+//16371101
+//Jordan O Donnell
+//Lab 2 (EE108R)
+//Part 2 Tutorial Starter
+//02/10/2017
+
+#include <ee108.h>
+
+
+const int SUPERLOOP_MS = 1000;
+const int LED_ON_MS = 50;
+const int NUM_LEDS = 5;
+const int WRAP_VALUE = 4;
+
+void setup() {
+  // initialize 5 bar LEDs
+  pinMode(BAR_LED_1_PIN, OUTPUT);
+  pinMode(BAR_LED_2_PIN, OUTPUT);
+  pinMode(BAR_LED_3_PIN, OUTPUT);
+  pinMode(BAR_LED_4_PIN, OUTPUT);
+  pinMode(BAR_LED_5_PIN, OUTPUT);
+}
+
+void loop() {
+  // this variable tracks which Bar LED we want to light
+  static int ledNum = 0;
+
+  // flash the LED on briefly and then switch it off again
+  digitalWrite(BAR_LED_1_PIN + ledNum, HIGH);
+  delay(LED_ON_MS);
+  digitalWrite(BAR_LED_1_PIN + ledNum, LOW);
+
+  // TODO - increment the counter and wrap if necessary
+  /* ++ledNum;
+  if(ledNum >= WRAP_VALUE)
+    ledNum = 0; */
+
+  ledNum = (ledNum + 1) % WRAP_VALUE; //Using mod operator to perform same tas
+  // pause between LED flashes
+  delay(SUPERLOOP_MS);
+}
+
+
+**********************************************************************************************************
+//16371101
+//Jordan O Donnell
+//Lab 2 (EE108R)
+//Part 3 Cascaded If Statements
+//02/10/2017
+
+#include <ee108.h>
+
+const int SUPERLOOP_DELAY_MS = 1000;
+const int WRAP_VALUE = 10;
+
+void setup() 
+{
+  pinMode(LED1_PIN, OUTPUT);
+  pinMode(LED2_PIN, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() 
+{
+  static int loopCounter = 0;
+
+  Serial.print("counter = ");
+  Serial.print(loopCounter);
+
+  if((loopCounter < 2) || (loopCounter > 7))
+  {
+    digitalWrite(LED1_PIN, LOW);
+    digitalWrite(LED2_PIN, LOW);
+    Serial.println(", Both LEDs off");
+  }
+  else if((loopCounter == 2) || (loopCounter == 7))
+  {
+    digitalWrite(LED1_PIN, HIGH);
+    digitalWrite(LED2_PIN, LOW);
+    Serial.println(", LED1 only");
+  }
+  else if((loopCounter == 3) || (loopCounter == 6))
+  {
+    digitalWrite(LED2_PIN, HIGH);
+    digitalWrite(LED1_PIN, LOW);
+    Serial.println(", LED2 only");
+  }
+  else if((loopCounter == 4) || (loopCounter == 5))
+  {
+    digitalWrite(LED1_PIN, HIGH);
+    digitalWrite(LED2_PIN, HIGH);
+    Serial.println(", Both LEDs on");
+  }
+else
+  {
+    digitalWrite(LED1_PIN, LOW);
+    digitalWrite(LED2_PIN, LOW);
+    Serial.println(", Both LEDs off");
+ }
+  loopCounter = (loopCounter+ 1) % WRAP_VALUE;
+
+  delay(SUPERLOOP_DELAY_MS);
+}
